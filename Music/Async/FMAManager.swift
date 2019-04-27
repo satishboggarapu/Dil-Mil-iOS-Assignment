@@ -8,8 +8,8 @@ class FMAManager {
         urlHelper = URLHelper()
     }
 
-    func getGenres(page: Int = 1, completion: @escaping (_ data: GenreResponse?, _ error: Error?) -> Void) {
-        let url = urlHelper.getGenresUrlString(page)
+    internal func getGenres(page: Int, completion: @escaping (_ data: GenresResponseModel?, _ error: Error?) -> Void) {
+        let url = urlHelper.getGenresURLString(page)
 
         getJSONFromURL(urlString: url) { data, error in
             guard let data = data, error == nil else {
@@ -21,6 +21,40 @@ class FMAManager {
                     return completion(nil, error)
                 }
                 return completion(model, nil)
+            }
+        }
+    }
+
+    internal func getAlbums(genre: GenreModel, page: Int, completion: @escaping (_ data: AlbumsResponseModel?, _ error: Error?) -> Void) {
+        let url = urlHelper.getAlbumsURLString(genreHandle: genre.handle, page: page)
+
+        getJSONFromURL(urlString: url) { data, error in
+            guard let data = data, error == nil else {
+                return completion(nil, error)
+            }
+
+            self.createAlbumObjectWith(json: data) { response, error in
+                guard let response = response, error == nil else {
+                    return completion(nil, error)
+                }
+                return completion(response, nil)
+            }
+        }
+    }
+
+    internal func getTracks(album: AlbumModel, page: Int, completion: @escaping (_ data: TracksResponseModel?, _ error: Error?) -> Void) {
+        let url = urlHelper.getTracksURLString(albumId: album.id, page: page)
+
+        getJSONFromURL(urlString: url) { data, error in
+            guard let data = data, error == nil else {
+                return completion(nil, error)
+            }
+            
+            self.createTrackObjectWith(json: data) { response, error in
+                guard let response = response, error == nil else {
+                    return completion(nil, error)
+                }
+                return completion(response, nil)
             }
         }
     }
@@ -46,10 +80,28 @@ extension FMAManager {
         task.resume()
     }
     
-    private func createGenreObjectWith(json: Data, completion: @escaping (_ data: GenreResponse?, _ error: Error?) -> Void) {
+    private func createGenreObjectWith(json: Data, completion: @escaping (_ data: GenresResponseModel?, _ error: Error?) -> Void) {
         do {
-            let genreResponse = try JSONDecoder().decode(GenreResponse.self, from: json)
+            let genreResponse = try JSONDecoder().decode(GenresResponseModel.self, from: json)
             return completion(genreResponse, nil)
+        } catch let error {
+            return completion(nil, error)
+        }
+    }
+
+    private func createAlbumObjectWith(json: Data, completion: @escaping (_ data: AlbumsResponseModel?, _ error: Error?) -> Void) {
+        do {
+            let albumResponse = try JSONDecoder().decode(AlbumsResponseModel.self, from: json)
+            return completion(albumResponse, nil)
+        } catch let error {
+            return completion(nil, error)
+        }
+    }
+    
+    private func createTrackObjectWith(json: Data, completion: @escaping (_ data: TracksResponseModel?, _ error: Error?) -> Void) {
+        do {
+            let trackResponse = try JSONDecoder().decode(TracksResponseModel.self, from: json)
+            return completion(trackResponse, nil)
         } catch let error {
             return completion(nil, error)
         }

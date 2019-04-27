@@ -7,15 +7,15 @@ class BrowseViewController: UIViewController {
     internal var collectionView: UICollectionView!
 
     // MARK: Attributes
-    lazy var genreViewModel: GenreViewModel = {
-        return GenreViewModel()
+    lazy var viewModel: GenresViewModel = {
+        return GenresViewModel()
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .viewBackground
-        genreViewModel = GenreViewModel()
+        viewModel = GenresViewModel()
 
         setupNavigationBar()
         setupView()
@@ -27,13 +27,13 @@ class BrowseViewController: UIViewController {
     private func initializeGenreViewModel() {
 
         ///
-        genreViewModel.reloadCollectionViewClosure = { () in
-            DispatchQueue.main.sync {
+        viewModel.reloadCollectionViewClosure = { () in
+            DispatchQueue.main.async {
                 self.collectionView.reloadData()
             }
         }
 
-        genreViewModel.fetchGenres()
+        viewModel.fetchGenres()
     }
 
     override func setupNavigationBar() {
@@ -73,29 +73,31 @@ class BrowseViewController: UIViewController {
 
 extension BrowseViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return genreViewModel.numberOfCells
+        return 10//viewModel.numberOfCells
     }
 
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? GenreCollectionViewCell ?? GenreCollectionViewCell()
 
-        let cellViewModel = genreViewModel.getCellViewModel(indexPath)
-        cell.updateCell(cellViewModel)
-
-        if indexPath.row == genreViewModel.numberOfCells - 6 {
-            genreViewModel.fetchGenres()
-        }
+//        let cellViewModel = viewModel.getCellViewModel(indexPath)
+//        cell.updateCell(cellViewModel)
+//
+//        if indexPath.row == viewModel.numberOfCells - 6 {
+//            viewModel.fetchGenres()
+//        }
 
         return cell
     }
 
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
+//        let genre = viewModel.getGenreForCell(indexPath)
+        let genre = GenreModel(id: "sjdc", parentId: "sdj", title: "skjd", handle: "skjdn", color: "sjdn")
+        navigationController?.pushViewController(AlbumsViewController(genre: genre), animated: true)
     }
 
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let size: CGFloat = (collectionView.frame.width - 16) / 2.0
-        return CGSize(width: size, height: size)
+        let width = collectionView.frame.width - 16
+        return CGSize(width: width, height: 128)
     }
 
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

@@ -7,6 +7,8 @@ target 'Music' do
 
   # Pods for Music
   pod 'SnapKit'
+  pod 'MaterialComponents'
+  pod 'SDWebImage'
 
   target 'MusicTests' do
     inherit! :search_paths

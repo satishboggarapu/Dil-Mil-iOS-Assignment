@@ -8,4 +8,8 @@ extension UIView {
         Parameters: None
      */
     @objc func setupView() { }
+
+    var statusBarHeight: CGFloat {
+        return UIApplication.shared.statusBarFrame.size.height
+    }
 }

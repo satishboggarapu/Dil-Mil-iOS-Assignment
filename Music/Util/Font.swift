@@ -4,6 +4,13 @@ public struct Font {
 
     public struct Futura {
 
+        public static func bold(with size: CGFloat) -> UIFont {
+            if let f = UIFont(name: "Futura-Bold", size: size) {
+                return f
+            }
+            return UIFont.systemFont(ofSize: size)
+        }
+
         public static func medium(with size: CGFloat) -> UIFont {
             if let f = UIFont(name: "Futura-Medium", size: size) {
                 return f
