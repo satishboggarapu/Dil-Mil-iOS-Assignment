@@ -11,6 +11,8 @@ class GenreCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
 
         setupView()
+        addConstraints()
+
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -20,6 +22,10 @@ class GenreCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
+        genreView.layer.shadowPath = UIBezierPath(rect: genreView.bounds).cgPath
+    }
+
+    override func addConstraints() {
         genreView.snp.makeConstraints { maker in
             maker.top.left.equalToSuperview().offset(8)
             maker.bottom.right.equalToSuperview().inset(8)
@@ -34,12 +40,17 @@ class GenreCollectionViewCell: UICollectionViewCell {
 
     override func setupView() {
         genreView = UIView()
-        genreView.backgroundColor = .appColor
+        genreView.backgroundColor = .white
         genreView.layer.cornerRadius = 4
+        genreView.layer.shadowOffset = .zero
+        genreView.layer.shadowColor = UIColor.lightGray.cgColor
+        genreView.layer.shadowRadius = 4
+        genreView.layer.shadowOpacity = 0.25
         addSubview(genreView)
 
         genreLabel = UILabel()
-        genreLabel.textColor = .white
+        genreLabel.text = "Genre Label"
+        genreLabel.textColor = .black
         genreLabel.font = Font.Futura.medium(with: 32)
         genreLabel.textAlignment = .right
         addSubview(genreLabel)
@@ -47,6 +58,7 @@ class GenreCollectionViewCell: UICollectionViewCell {
 
     internal func updateCell(_ viewModel: GenreCellViewModel) {
         genreLabel.text = viewModel.titleText
-        genreView.backgroundColor = viewModel.genreBackgroundColor
+        genreLabel.textColor = viewModel.genreBackgroundColor
+//        genreView.backgroundColor =  viewModel.genreBackgroundColor
     }
 }

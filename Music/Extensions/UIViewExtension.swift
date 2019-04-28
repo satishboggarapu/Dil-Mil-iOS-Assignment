@@ -9,6 +9,13 @@ extension UIView {
      */
     @objc func setupView() { }
 
+    /**
+        Creates constraints for UIElements in the ViewController
+
+        Parameters: None
+     */
+    @objc func addConstraints() { }
+
     var statusBarHeight: CGFloat {
         return UIApplication.shared.statusBarFrame.size.height
     }

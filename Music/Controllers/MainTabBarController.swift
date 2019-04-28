@@ -10,8 +10,8 @@ class MainTabBarController: UITabBarController {
 
         setupTabBar()
         setupTabBarViewControllers()
-        setupView()
-        addConstraints()
+//        setupView()
+//        addConstraints()
 
     }
 
@@ -25,9 +25,6 @@ class MainTabBarController: UITabBarController {
 
     private func setupTabBar() {
         tabBar.barTintColor = .white
-        tabBar.barStyle = .default
-        tabBar.isOpaque = false
-        tabBar.isTranslucent = false
         tabBar.tintColor = .appColor
         tabBar.unselectedItemTintColor = UIColor(hex: 0xd2d3d2)
     }

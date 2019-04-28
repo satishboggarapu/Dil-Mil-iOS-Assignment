@@ -22,6 +22,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = MainTabBarController()
         window?.makeKeyAndVisible()
+
+        if let tabBarController = self.window?.rootViewController as? UITabBarController {
+            let tabGradientView = UIView(frame: tabBarController.tabBar.bounds)
+            tabGradientView.backgroundColor = UIColor.white
+            tabGradientView.translatesAutoresizingMaskIntoConstraints = false;
+
+
+            tabBarController.tabBar.addSubview(tabGradientView)
+            tabBarController.tabBar.sendSubviewToBack(tabGradientView)
+            tabGradientView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+
+            tabGradientView.layer.shadowOffset = CGSize(width: 0, height: 0)
+            tabGradientView.layer.shadowRadius = 4.0
+            tabGradientView.layer.shadowColor = UIColor.lightGray.cgColor
+            tabGradientView.layer.shadowOpacity = 0.25
+            tabBarController.tabBar.clipsToBounds = false
+            tabBarController.tabBar.backgroundImage = UIImage()
+            tabBarController.tabBar.shadowImage = UIImage()
+        }
         
         return true
     }

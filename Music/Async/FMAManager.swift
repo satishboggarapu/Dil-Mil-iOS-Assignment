@@ -3,6 +3,7 @@ import Foundation
 class FMAManager {
 
     private var urlHelper: URLHelper!
+    private let defaults = UserDefaults.standard
 
     init() {
         urlHelper = URLHelper()
@@ -15,6 +16,8 @@ class FMAManager {
             guard let data = data, error == nil else {
                 return completion(nil, error)
             }
+
+            self.defaults.set(data, forKey: "genres")
 
             self.createGenreObjectWith(json: data) { model, error in
                 guard let model = model, error == nil else {
@@ -33,6 +36,8 @@ class FMAManager {
                 return completion(nil, error)
             }
 
+            self.defaults.set(data, forKey: "\(genre.handle)")
+
             self.createAlbumObjectWith(json: data) { response, error in
                 guard let response = response, error == nil else {
                     return completion(nil, error)
@@ -49,6 +54,8 @@ class FMAManager {
             guard let data = data, error == nil else {
                 return completion(nil, error)
             }
+
+            self.defaults.set(data, forKey: "\(album.id)")
             
             self.createTrackObjectWith(json: data) { response, error in
                 guard let response = response, error == nil else {
