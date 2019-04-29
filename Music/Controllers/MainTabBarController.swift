@@ -15,6 +15,12 @@ class MainTabBarController: UITabBarController {
 
     }
 
+/*    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        musicPlayerTapGesture()
+    }*/
+
     override func addConstraints() {
         musicPlayer.snp.makeConstraints { maker in
             maker.left.right.equalToSuperview()
