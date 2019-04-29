@@ -3,17 +3,25 @@ import SnapKit
 
 class MusicPlayer: UIView {
 
+    var albumView: UIView!
+    var albumImageView: UIImageView!
     var titleLabel: UILabel!
-    var subTitleLabel: UILabel!
-    var favoriteButton: UIButton!
+    var nextTrackButton: UIButton!
     var playPauseButton: UIButton!
-    var slider: UISlider!
+    var favoriteButton: UIButton!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = .gray
+        backgroundColor = .white
+        self.layer.shadowOffset = .zero
+        self.layer.shadowColor = UIColor.darkGray.cgColor
+        self.layer.shadowRadius = 4
+        self.layer.shadowOpacity = 0.15
+
         setupView()
+
+        albumImageView.sd_setImage(with: URL(string: "https://freemusicarchive.org/file/images/artists/the_tunnel_-_20150909203729678.jpg"), placeholderImage: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -23,71 +31,86 @@ class MusicPlayer: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        favoriteButton.snp.makeConstraints { maker in
-            maker.left.equalToSuperview().offset(8)
+        albumView.snp.makeConstraints { maker in
+            maker.left.equalToSuperview().offset(16)
+            maker.top.equalToSuperview().offset(8)
+            maker.bottom.equalToSuperview().inset(8)
+            maker.width.equalTo(self.bounds.height-16)
+        }
+
+        albumImageView.snp.makeConstraints { maker in
+            maker.edges.equalToSuperview()
+        }
+
+        nextTrackButton.snp.makeConstraints { maker in
+            maker.right.equalToSuperview().inset(16)
             maker.centerY.equalToSuperview()
-            maker.size.equalTo(self.snp.height)
+            maker.size.equalTo(48)
         }
 
         playPauseButton.snp.makeConstraints { maker in
-            maker.right.equalToSuperview().inset(8)
+            maker.right.equalTo(nextTrackButton.snp.left).inset(-8)
             maker.centerY.equalToSuperview()
-            maker.size.equalTo(self.snp.height)
+            maker.size.equalTo(48)
+        }
+
+        favoriteButton.snp.makeConstraints { maker in
+            maker.right.equalTo(playPauseButton.snp.left).inset(-8)
+            maker.centerY.equalToSuperview()
+            maker.height.equalTo(32)
+            maker.width.equalTo(48)
         }
 
         titleLabel.snp.makeConstraints { maker in
-            maker.left.equalTo(favoriteButton.snp.right).offset(16)
-            maker.right.equalTo(playPauseButton.snp.left).inset(-16)
-            maker.top.equalToSuperview().offset(6)
-            maker.bottom.equalTo(self.snp.centerY)
+            maker.left.equalTo(albumView.snp.right).offset(24)
+            maker.right.equalTo(favoriteButton.snp.left)
+            maker.top.equalTo(albumView)
+            maker.bottom.equalTo(albumView)
         }
 
-        subTitleLabel.snp.makeConstraints { maker in
-            maker.left.equalTo(favoriteButton.snp.right).offset(16)
-            maker.right.equalTo(playPauseButton.snp.left).inset(-16)
-            maker.bottom.equalToSuperview().inset(8)
-            maker.top.equalTo(self.snp.centerY)
-        }
-
-        slider.snp.makeConstraints { maker in
-            maker.top.left.right.equalToSuperview()
-            maker.height.equalTo(2)
-        }
-
+        self.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
+        albumView.layer.shadowPath = UIBezierPath(rect: albumView.bounds).cgPath
     }
 
     override func setupView() {
+        albumView = UIView()
+        albumView.backgroundColor = .white
+        albumView.layer.cornerRadius = 4
+        albumView.layer.shadowOffset = .zero
+        albumView.layer.shadowColor = UIColor.gray.cgColor
+        albumView.layer.shadowRadius = 4
+        albumView.layer.shadowOpacity = 0.75
+        addSubview(albumView)
+
+        albumImageView = UIImageView()
+        albumImageView.contentMode = .scaleAspectFill
+        albumImageView.layer.cornerRadius = 4
+        albumImageView.clipsToBounds = true
+        albumView.addSubview(albumImageView)
+
         titleLabel = UILabel()
         titleLabel.text = "Title Label"
         titleLabel.textColor = .black
-        titleLabel.textAlignment = .center
-        titleLabel.font = Font.Futura.medium(with: 15)
+        titleLabel.textAlignment = .left
+        titleLabel.font = Font.Futura.regular(with: 18)
         addSubview(titleLabel)
 
-        subTitleLabel = UILabel()
-        subTitleLabel.text = "Sub title label"
-        subTitleLabel.textColor = .black
-        subTitleLabel.textAlignment = .center
-        subTitleLabel.font = Font.Futura.regular(with: 15)
-        addSubview(subTitleLabel)
-
-        favoriteButton = UIButton()
-        favoriteButton.setImage(UIImage(icon: .HEART_OUTLINE_36), for: .normal)
-        favoriteButton.imageView?.tintColor = .black
-        addSubview(favoriteButton)
+        nextTrackButton = UIButton()
+        nextTrackButton.setImage(UIImage(icon: .NEXT_TRACK_36), for: .normal)
+        nextTrackButton.imageView?.tintColor = .black
+        nextTrackButton.imageView?.contentMode = .scaleAspectFit
+        addSubview(nextTrackButton)
 
         playPauseButton = UIButton()
         playPauseButton.setImage(UIImage(icon: .PLAY_36), for: .normal)
         playPauseButton.imageView?.tintColor = .black
+        playPauseButton.imageView?.contentMode = .scaleAspectFit
         addSubview(playPauseButton)
 
-        slider = UISlider()
-        slider.minimumTrackTintColor = .black
-        slider.maximumTrackTintColor = .white
-        slider.setThumbImage(UIImage(), for: .normal)
-        slider.minimumValue = 0
-        slider.maximumValue = 100
-        slider.setValue(23, animated: false)
-        addSubview(slider)
+        favoriteButton = UIButton()
+        favoriteButton.setImage(UIImage(icon: .HEART_OUTLINE_36), for: .normal)
+        favoriteButton.imageView?.tintColor = .black
+        favoriteButton.imageView?.contentMode = .scaleAspectFit
+        addSubview(favoriteButton)
     }
 }

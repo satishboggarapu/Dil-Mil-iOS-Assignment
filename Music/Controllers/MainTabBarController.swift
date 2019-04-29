@@ -10,8 +10,8 @@ class MainTabBarController: UITabBarController {
 
         setupTabBar()
         setupTabBarViewControllers()
-//        setupView()
-//        addConstraints()
+        setupView()
+        addConstraints()
 
     }
 
@@ -48,10 +48,10 @@ class MainTabBarController: UITabBarController {
         let nowPlayingViewController = NowPlayingViewController()
         nowPlayingViewController.tabBarItem = UITabBarItem(title: "Now Playing", image: UIImage(icon: .NOW_PLAYING), tag: 2)
 
-//        let musicPlayerViewController = MusicPlayerViewController()
-//        musicPlayerViewController.tabBarItem = UITabBarItem(title: "Now Playing", image: UIImage(icon: .NOW_PLAYING), tag: 2)
+        let musicPlayerViewController = MusicPlayerViewController()
+        musicPlayerViewController.tabBarItem = UITabBarItem(title: "Now Playing", image: UIImage(icon: .NOW_PLAYING), tag: 2)
 
-        let controllers = [browseViewController]
+        let controllers = [browseViewController, musicPlayerViewController]
         viewControllers = controllers.map { UINavigationController(rootViewController: $0) }
     }
 
