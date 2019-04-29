@@ -4,11 +4,15 @@ struct TrackCellViewModel {
     let model: TrackModel
     let titleText: String
     let trackNumberText: String
+    let trackImageUrl: String
+    let albumTitleText: String
 
     init(track: TrackModel) {
         self.model = track
         self.titleText = track.title
         self.trackNumberText = track.trackNumber
+        self.trackImageUrl = track.trackImageUrl
+        self.albumTitleText = track.albumTitle
     }
 
     var listensText: String {

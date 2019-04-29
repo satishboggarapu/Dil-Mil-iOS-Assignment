@@ -1,20 +1,26 @@
 import UIKit
 import SnapKit
+import SDWebImage
+import NVActivityIndicatorView
 
 class TrackCollectionViewCell: UICollectionViewCell {
 
     // MARK: UIElements
-    internal var trackNumberLabel: UILabel!
-    internal var titleLabel: UILabel!
-    internal var artistLabel: UILabel!
-    internal var listensLabel: UILabel!
-    internal var favoriteButton: UIButton!
-    private var dividerView: UIView!
+    var albumView: UIView!
+    var albumImageView: UIImageView!
+    var trackTitleLabel: UILabel!
+    var trackAlbumLabel: UILabel!
+    var listensImageView: UIImageView!
+    var listensLabel: UILabel!
+    var animationView: NVActivityIndicatorView!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         setupView()
+        addConstraints()
+
+        albumImageView.sd_setImage(with: URL(string: "https://freemusicarchive.org/file/images/artists/the_tunnel_-_20150909203729678.jpg"), placeholderImage: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -24,71 +30,107 @@ class TrackCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        trackNumberLabel.snp.makeConstraints { maker in
-            maker.left.equalToSuperview().offset(8)
-            maker.top.bottom.equalToSuperview()
-            maker.width.equalTo(14)
-        }
+        albumView.layer.shadowPath = UIBezierPath(rect: albumView.bounds).cgPath
+    }
 
-        favoriteButton.snp.makeConstraints { maker in
-            maker.right.equalToSuperview().inset(16)
+    override func setupView() {
+        albumView = UIView()
+        albumView.backgroundColor = .white
+        albumView.layer.cornerRadius = 4
+        albumView.layer.shadowOffset = .zero
+        albumView.layer.shadowColor = UIColor.darkGray.cgColor
+        albumView.layer.shadowRadius = 4
+        albumView.layer.shadowOpacity = 0.75
+        addSubview(albumView)
+
+        albumImageView = UIImageView()
+        albumImageView.contentMode = .scaleAspectFill
+        albumImageView.layer.cornerRadius = 4
+        albumImageView.clipsToBounds = true
+        albumView.addSubview(albumImageView)
+
+        trackTitleLabel = UILabel()
+        trackTitleLabel.text = "Track Title"
+        trackTitleLabel.textColor = .black
+        trackTitleLabel.font = Font.Futura.medium(with: 18)
+        trackTitleLabel.textAlignment = .left
+        addSubview(trackTitleLabel)
+
+        trackAlbumLabel = UILabel()
+        trackAlbumLabel.text = "Album Label"
+        trackAlbumLabel.textColor = .black
+        trackAlbumLabel.font = Font.Futura.regular(with: 16)
+        trackAlbumLabel.textAlignment = .left
+        addSubview(trackAlbumLabel)
+
+        listensLabel = UILabel()
+        listensLabel.text = "12.4K"
+        listensLabel.textColor = .darkGray
+        listensLabel.font = Font.Futura.regular(with: 13)
+        listensLabel.textAlignment = .left
+        addSubview(listensLabel)
+
+        listensImageView = UIImageView()
+        listensImageView.image = UIImage(icon: .PLAY_24)
+        listensImageView.tintColor = .darkGray
+        addSubview(listensImageView)
+
+        animationView = NVActivityIndicatorView(frame: .zero)
+        animationView.type = .audioEqualizer
+        animationView.color = .darkGray
+        addSubview(animationView)
+    }
+
+    override func addConstraints() {
+        animationView.snp.makeConstraints { maker in
+            maker.left.equalToSuperview().offset(0)
             maker.centerY.equalToSuperview()
             maker.size.equalTo(24)
         }
 
+        albumView.snp.makeConstraints { maker in
+            maker.left.equalTo(animationView.snp.right).offset(12)
+            maker.top.equalToSuperview().offset(6)
+            maker.bottom.equalToSuperview().inset(6)
+            maker.width.equalTo(self.bounds.height - 12)
+        }
+
+        albumImageView.snp.makeConstraints { maker in
+            maker.edges.equalToSuperview()
+        }
+
         listensLabel.snp.makeConstraints { maker in
-            maker.top.bottom.equalToSuperview()
-            maker.right.equalTo(favoriteButton.snp.left).inset(16)
-            maker.width.equalTo(50)
+            maker.top.equalTo(albumView)
+            maker.bottom.equalTo(albumView)
+            maker.right.equalToSuperview().inset(24)
+            maker.width.equalTo(35)
         }
 
-        titleLabel.snp.makeConstraints { maker in
-            maker.left.equalTo(trackNumberLabel.snp.right).offset(12)
-            maker.right.equalTo(listensLabel.snp.left).inset(16)
-            maker.top.bottom.equalToSuperview()
+        listensImageView.snp.makeConstraints { maker in
+            maker.right.equalTo(listensLabel.snp.left)
+            maker.centerY.equalToSuperview()
+            maker.size.equalTo(18)
         }
 
-        dividerView.snp.makeConstraints { maker in
-            maker.left.right.bottom.equalToSuperview()
-            maker.height.equalTo(0.5)
+        trackTitleLabel.snp.makeConstraints { maker in
+            maker.left.equalTo(albumView.snp.right).offset(24)
+            maker.top.equalTo(albumView.snp.top).offset(6)
+            maker.bottom.equalTo(albumView.snp.centerY).inset(-1)
+            maker.right.equalTo(listensImageView.snp.left).inset(-16)
+        }
+
+        trackAlbumLabel.snp.makeConstraints { maker in
+            maker.left.equalTo(albumView.snp.right).offset(24)
+            maker.top.equalTo(albumView.snp.centerY).offset(1)
+            maker.bottom.equalTo(albumView.snp.bottom).inset(6)
+            maker.right.equalTo(listensImageView.snp.left).inset(-16)
         }
     }
 
-    override func setupView() {
-        titleLabel = UILabel()
-        titleLabel.text = "Track Title Label"
-        titleLabel.textColor = .black
-        titleLabel.font = Font.Futura.medium(with: 17)
-        titleLabel.textAlignment = .left
-        addSubview(titleLabel)
-
-        listensLabel = UILabel()
-        listensLabel.text = "12k"
-        listensLabel.textColor = .black
-        listensLabel.font = Font.Futura.regular(with: 12)
-        listensLabel.textAlignment = .left
-        addSubview(listensLabel)
-
-        favoriteButton = UIButton()
-        favoriteButton.setImage(UIImage(icon: .HEART_OUTLINE_24), for: .normal)
-        favoriteButton.imageView?.tintColor = .black
-        addSubview(favoriteButton)
-
-        dividerView = UIView()
-        dividerView.backgroundColor = .divider
-        addSubview(dividerView)
-
-        trackNumberLabel = UILabel()
-        trackNumberLabel.text = "1"
-        trackNumberLabel.textColor = .gray
-        trackNumberLabel.font = Font.Futura.medium(with: 15)
-        trackNumberLabel.textAlignment = .left
-        addSubview(trackNumberLabel)
-    }
-    
     internal func updateCell(_ viewModel: TrackCellViewModel) {
-        titleLabel.text = viewModel.titleText
-        trackNumberLabel.text = viewModel.trackNumberText
+        albumImageView.sd_setImage(with: URL(string: viewModel.trackImageUrl), placeholderImage: nil)
+        trackTitleLabel.text = viewModel.titleText
+        trackAlbumLabel.text = viewModel.albumTitleText
         listensLabel.text = viewModel.listensText
     }
 }

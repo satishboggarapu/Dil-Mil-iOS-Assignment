@@ -45,6 +45,7 @@
 		192E4D087AC13D73BD95D4B2 /* AlbumCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4C3B5A34BB5B7FA49E90 /* AlbumCellViewModel.swift */; };
 		192E4DA1E242F7582929F41D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 192E4E372AB3020D25E6FC99 /* LaunchScreen.storyboard */; };
 		192E4E0B9306426686A22377 /* TrackCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E42B7A9439218D3B509BD /* TrackCollectionViewCell.swift */; };
+		192E4EADF91202BF19C47A54 /* TracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E49E6B22A1E4949A8D4C8 /* TracksViewController.swift */; };
 		192E4EB623FF81D063F4971F /* AlbumsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4000A49E80D2E2F3FE83 /* AlbumsViewController.swift */; };
 		192E4FCA684744B2BAFB17F9 /* MusicPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E40B9E2EFBF19973FCC0A /* MusicPlayerViewController.swift */; };
 		192E4FF73868E6032779183A /* TracksResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192E4BD21218A31365887A9A /* TracksResponseModel.swift */; };
@@ -103,6 +104,7 @@
 		192E480BAC8C529A06E8AA89 /* AlbumHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumHeaderView.swift; sourceTree = "<group>"; };
 		192E49293DB036C268CDB270 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		192E49B91FF9A242C297C7C6 /* AlbumModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumModel.swift; sourceTree = "<group>"; };
+		192E49E6B22A1E4949A8D4C8 /* TracksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TracksViewController.swift; sourceTree = "<group>"; };
 		192E4AF4A3EDC1BF2C7BC446 /* Font.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		192E4BD21218A31365887A9A /* TracksResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TracksResponseModel.swift; sourceTree = "<group>"; };
 		192E4C072A278FC49E06EF92 /* TrackCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackCellViewModel.swift; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 				192E4000A49E80D2E2F3FE83 /* AlbumsViewController.swift */,
 				192E43A4A0B560A362B9F186 /* AlbumViewController.swift */,
 				192E40B9E2EFBF19973FCC0A /* MusicPlayerViewController.swift */,
+				192E49E6B22A1E4949A8D4C8 /* TracksViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -515,6 +518,7 @@
 				"${BUILT_PRODUCTS_DIR}/MotionAnimator/MotionAnimator.framework",
 				"${BUILT_PRODUCTS_DIR}/MotionInterchange/MotionInterchange.framework",
 				"${BUILT_PRODUCTS_DIR}/MotionTransitioning/MotionTransitioning.framework",
+				"${BUILT_PRODUCTS_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 			);
@@ -528,6 +532,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MotionAnimator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MotionInterchange.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MotionTransitioning.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NVActivityIndicatorView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 			);
@@ -623,6 +628,7 @@
 				192E4D087AC13D73BD95D4B2 /* AlbumCellViewModel.swift in Sources */,
 				192E42418D4CEEA42B3AB685 /* GenreCellViewModel.swift in Sources */,
 				192E4C2001AA59318EEE0845 /* TrackCellViewModel.swift in Sources */,
+				192E4EADF91202BF19C47A54 /* TracksViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

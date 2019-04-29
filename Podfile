@@ -9,6 +9,7 @@ target 'Music' do
   pod 'SnapKit'
   pod 'MaterialComponents'
   pod 'SDWebImage'
+  pod 'NVActivityIndicatorView'
 
   target 'MusicTests' do
     inherit! :search_paths

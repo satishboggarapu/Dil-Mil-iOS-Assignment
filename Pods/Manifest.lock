@@ -463,6 +463,9 @@ PODS:
     - MotionInterchange (~> 1.6)
   - MotionInterchange (1.6.0)
   - MotionTransitioning (5.0.0)
+  - NVActivityIndicatorView (4.4.0):
+    - NVActivityIndicatorView/Presenter (= 4.4.0)
+  - NVActivityIndicatorView/Presenter (4.4.0)
   - SDWebImage (4.4.2):
     - SDWebImage/Core (= 4.4.2)
   - SDWebImage/Core (4.4.2)
@@ -470,6 +473,7 @@ PODS:
 
 DEPENDENCIES:
   - MaterialComponents
+  - NVActivityIndicatorView
   - SDWebImage
   - SnapKit
 
@@ -481,6 +485,7 @@ SPEC REPOS:
     - MotionAnimator
     - MotionInterchange
     - MotionTransitioning
+    - NVActivityIndicatorView
     - SDWebImage
     - SnapKit
 
@@ -491,9 +496,10 @@ SPEC CHECKSUMS:
   MotionAnimator: ee16aa30567c5bae0fb2750c132915829cfaaf8a
   MotionInterchange: ead0e3ae1f3a5fb539e289debbc7ae036160a10d
   MotionTransitioning: 23d25edc2f4606efb922403cbac6d81af37aa33a
+  NVActivityIndicatorView: ec7440a57af2450319d3a4181cca7da6fc127064
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
 
-PODFILE CHECKSUM: 88465f008e783ec6c0d476bcce4c84efc2810f54
+PODFILE CHECKSUM: 18245c897debbe486065973907b53351025d54e3
 
 COCOAPODS: 1.5.3

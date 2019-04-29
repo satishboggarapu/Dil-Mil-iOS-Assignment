@@ -99,7 +99,7 @@ extension BrowseViewController: UICollectionViewDelegate, UICollectionViewDataSo
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 //        let genre = viewModel.getGenreForCell(indexPath)
         let genre = GenreModel(id: "sjdc", parentId: "sdj", title: "skjd", handle: "skjdn", color: "sjdn")
-        navigationController?.pushViewController(AlbumsViewController(genre: genre), animated: true)
+        navigationController?.pushViewController(TracksViewController(genre: genre), animated: true)
     }
 
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

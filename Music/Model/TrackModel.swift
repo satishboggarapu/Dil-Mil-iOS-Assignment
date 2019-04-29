@@ -7,6 +7,8 @@ struct TrackModel: Decodable {
     let fileUrl: String
     let listens: String
     let trackNumber: String
+    let trackImageUrl: String
+    let albumTitle: String
 
     enum CodingKeys: String, CodingKey {
         case id = "track_id"
@@ -15,5 +17,7 @@ struct TrackModel: Decodable {
         case fileUrl = "track_file"
         case listens = "track_listens"
         case trackNumber = "track_number"
+        case trackImageUrl = "track_image_file"
+        case albumTitle = "album_title"
     }
 }
