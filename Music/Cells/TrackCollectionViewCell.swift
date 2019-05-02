@@ -13,6 +13,7 @@ class TrackCollectionViewCell: UICollectionViewCell {
     var listensImageView: UIImageView!
     var listensLabel: UILabel!
     var animationView: NVActivityIndicatorView!
+    var equalizerImageView: UIImageView!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,7 +21,7 @@ class TrackCollectionViewCell: UICollectionViewCell {
         setupView()
         addConstraints()
 
-        albumImageView.sd_setImage(with: URL(string: "https://freemusicarchive.org/file/images/artists/the_tunnel_-_20150909203729678.jpg"), placeholderImage: nil)
+//        albumImageView.sd_setImage(with: URL(string: "https://freemusicarchive.org/file/images/artists/the_tunnel_-_20150909203729678.jpg"), placeholderImage: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -79,10 +80,22 @@ class TrackCollectionViewCell: UICollectionViewCell {
         animationView.type = .audioEqualizer
         animationView.color = .darkGray
         addSubview(animationView)
+
+        equalizerImageView = UIImageView()
+        equalizerImageView.image = UIImage(icon: .EQUALIZER_24)
+        equalizerImageView.tintColor = .darkGray
+        equalizerImageView.isHidden = true
+        addSubview(equalizerImageView)
     }
 
     override func addConstraints() {
         animationView.snp.makeConstraints { maker in
+            maker.left.equalToSuperview().offset(0)
+            maker.centerY.equalToSuperview()
+            maker.size.equalTo(24)
+        }
+
+        equalizerImageView.snp.makeConstraints { maker in
             maker.left.equalToSuperview().offset(0)
             maker.centerY.equalToSuperview()
             maker.size.equalTo(24)
@@ -114,7 +127,7 @@ class TrackCollectionViewCell: UICollectionViewCell {
 
         trackTitleLabel.snp.makeConstraints { maker in
             maker.left.equalTo(albumView.snp.right).offset(24)
-            maker.top.equalTo(albumView.snp.top).offset(6)
+            maker.top.equalTo(albumView.snp.top).offset(2)
             maker.bottom.equalTo(albumView.snp.centerY).inset(-1)
             maker.right.equalTo(listensImageView.snp.left).inset(-16)
         }
@@ -132,5 +145,21 @@ class TrackCollectionViewCell: UICollectionViewCell {
         trackTitleLabel.text = viewModel.titleText
         trackAlbumLabel.text = viewModel.albumTitleText
         listensLabel.text = viewModel.listensText
+
+        listensLabel.snp.updateConstraints { maker in
+            maker.width.equalTo(listensLabel.intrinsicContentSize.width)
+        }
+    }
+    
+    internal func toggleAnimation(isCurrentTrack: Bool, isPlaying: Bool) {
+        _ = isCurrentTrack ? animationView.startAnimating() : animationView.stopAnimating()
+
+//        if isCurrentTrack {
+//            _ = isPlaying ? animationView.startAnimating() : animationView.stopAnimating()
+//            equalizerImageView.isHidden = isPlaying
+//        } else {
+//            animationView.stopAnimating()
+//            equalizerImageView.isHidden = true
+//        }
     }
 }

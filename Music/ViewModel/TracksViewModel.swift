@@ -5,7 +5,7 @@ class TracksViewModel {
     private(set) var tracksResponseModel: TracksResponseModel!
     private var fmaManager: FMAManager!
     private var isLoading: Bool!
-    private var album: AlbumModel!
+    private var genre: GenreModel!
 
     private var cellViewModels = [TrackCellViewModel]() {
         didSet {
@@ -21,8 +21,8 @@ class TracksViewModel {
     internal var reloadCollectionViewClosure: (() -> ())?
 
 
-    init(album: AlbumModel) {
-        self.album = album
+    init(genre: GenreModel) {
+        self.genre = genre
         fmaManager = FMAManager()
         isLoading = false
     }
@@ -32,15 +32,39 @@ class TracksViewModel {
             return
         }
 
-        if let trackResponse = tracksResponseModel,
-           trackResponse.totalPages == Int(trackResponse.currentPage) {
-            return
-        }
+//        if let trackResponse = tracksResponseModel,
+//           trackResponse.totalPages == Int(trackResponse.currentPage) {
+//            return
+//        }
+
+//        self.isLoading = true
+//        let tracks = ["188044", "188043", "188042", "188041", "188040", "188039",
+//                      "187968", "187957", "187956", "187955"]
+//
+//
+//        let dispatchGroup = DispatchGroup()
+//        var trackModels = [TrackModel]()
+//        for track in tracks {
+//            dispatchGroup.enter()
+//            fmaManager.getTrack(trackId: track) { model, error in
+//                if let model = model {
+//                    trackModels.append(model)
+//                }
+//                dispatchGroup.leave()
+//            }
+//        }
+//
+//        dispatchGroup.notify(queue: .main) {
+//            self.isLoading = false
+//            self.tracksResponseModel = TracksResponseModel(totalPages: 1, currentPage: "1", tracks: trackModels)
+//            self.appendTrackCellViewModels(trackModels)
+//        }
+
 
         isLoading = true
-        let currentPage = (tracksResponseModel == nil) ? 0 : Int(tracksResponseModel.currentPage)!
+        let currentPage = 1//(tracksResponseModel == nil) ? 0 : Int(tracksResponseModel.currentPage)!
         let nextPage = currentPage + 1
-        fmaManager.getTracks(album: album, page: nextPage) { response, error in
+        fmaManager.getTracks(genre: genre, page: nextPage) { response, error in
             guard let response = response, error == nil else {
                 self.isLoading = false
                 return

@@ -19,6 +19,8 @@ extension UIImage {
         case PAUSE_48 = "round_pause_white_48pt"
         case PREVIOUS_TRACK_36 = "round_skip_previous_white_36pt"
         case NEXT_TRACK_36 = "round_skip_next_white_36pt"
+        case EQUALIZER_24 = "baseline_equalizer_white_24pt"
+        case DOWN_ARROW = "round_keyboard_arrow_down_white_36pt"
     }
 
     convenience init!(icon: Icon) {

@@ -1,6 +1,6 @@
 import Foundation
 
-struct GenreModel: Decodable {
+struct GenreModel: Codable {
     let id: String
     let parentId: String?
     let title: String

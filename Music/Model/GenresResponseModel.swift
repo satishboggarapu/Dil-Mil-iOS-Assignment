@@ -1,9 +1,9 @@
 import Foundation
 
-struct GenresResponseModel: Decodable {
-    var totalPages: Double
-    var currentPage: String
-    var genres: [GenreModel]
+struct GenresResponseModel: Codable {
+    private(set) var totalPages: Double
+    private(set) var currentPage: String
+    private(set) var genres: [GenreModel]
 
     enum CodingKeys: String, CodingKey {
         case totalPages = "total_pages"

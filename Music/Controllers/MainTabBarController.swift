@@ -51,13 +51,7 @@ class MainTabBarController: UITabBarController {
         let browseViewController = BrowseViewController()
         browseViewController.tabBarItem = UITabBarItem(title: "Browse", image: UIImage(icon: .LIBRARY), tag: 1)
 
-        let nowPlayingViewController = NowPlayingViewController()
-        nowPlayingViewController.tabBarItem = UITabBarItem(title: "Now Playing", image: UIImage(icon: .NOW_PLAYING), tag: 2)
-
-        let musicPlayerViewController = MusicPlayerViewController()
-        musicPlayerViewController.tabBarItem = UITabBarItem(title: "Now Playing", image: UIImage(icon: .NOW_PLAYING), tag: 2)
-
-        let controllers = [browseViewController, musicPlayerViewController]
+        let controllers = [browseViewController, searchViewController]
         viewControllers = controllers.map { UINavigationController(rootViewController: $0) }
     }
 

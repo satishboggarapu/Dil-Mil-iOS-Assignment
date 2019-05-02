@@ -6,6 +6,7 @@ class URLHelper {
     private let genresURL = "https://freemusicarchive.org/api/get/genres.json?"
     private let albumsURL = "https://freemusicarchive.org/api/get/albums.json?"
     private let tracksURL = "https://freemusicarchive.org/api/get/tracks.json?"
+    private let trackURL = "http://freemusicarchive.org/services/track/single/"
 
     func getGenresURLString(_ page: Int) -> String {
         var url = genresURL
@@ -22,11 +23,18 @@ class URLHelper {
         return url
     }
 
-    func getTracksURLString(albumId: String, page: Int) -> String {
+    func getTracksURLString(genreId: String, page: Int) -> String {
         var url = tracksURL
         url += "api_key=\(apiKey)&"
-        url += "album_id=\(albumId)&"
+        url += "genre_id=\(genreId)&"
         url += "page=\(page)"
+        return url
+    }
+
+    func getTrackURLString(trackId: String) -> String {
+        var url = trackURL
+        url += "\(trackId).json?"
+        url += "api_key=\(apiKey)"
         return url
     }
 

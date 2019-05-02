@@ -1,9 +1,9 @@
 import Foundation
 
-struct TracksResponseModel: Decodable {
-    var totalPages: Int
-    var currentPage: String
-    var tracks: [TrackModel]
+struct TracksResponseModel: Codable {
+    private(set) var totalPages: Int
+    private(set) var currentPage: String
+    private(set) var tracks: [TrackModel]
 
     enum CodingKeys: String, CodingKey {
         case totalPages = "total_pages"

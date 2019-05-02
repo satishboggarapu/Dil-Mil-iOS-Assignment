@@ -50,7 +50,7 @@ class GenreCollectionViewCell: UICollectionViewCell {
 
         genreLabel = UILabel()
         genreLabel.text = "Genre Label"
-        genreLabel.textColor = .black
+        genreLabel.textColor = .white
         genreLabel.font = Font.Futura.medium(with: 32)
         genreLabel.textAlignment = .right
         addSubview(genreLabel)
@@ -58,7 +58,7 @@ class GenreCollectionViewCell: UICollectionViewCell {
 
     internal func updateCell(_ viewModel: GenreCellViewModel) {
         genreLabel.text = viewModel.titleText
-        genreLabel.textColor = viewModel.genreBackgroundColor
-//        genreView.backgroundColor =  viewModel.genreBackgroundColor
+//        genreLabel.textColor = viewModel.genreBackgroundColor
+        genreView.backgroundColor =  viewModel.genreBackgroundColor
     }
 }

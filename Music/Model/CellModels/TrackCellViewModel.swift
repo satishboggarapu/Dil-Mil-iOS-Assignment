@@ -10,13 +10,13 @@ struct TrackCellViewModel {
     init(track: TrackModel) {
         self.model = track
         self.titleText = track.title
-        self.trackNumberText = track.trackNumber
-        self.trackImageUrl = track.trackImageUrl
-        self.albumTitleText = track.albumTitle
+        self.trackNumberText = track.trackNumber ?? ""
+        self.trackImageUrl = track.trackImageUrl ?? ""
+        self.albumTitleText = track.albumTitle ?? ""
     }
 
     var listensText: String {
-        guard let num = Int(model.listens) else {
+        guard let num = Int(model.listens ?? "0") else {
             return ""
         }
 

@@ -1,5 +1,6 @@
 import UIKit
 import SnapKit
+import SDWebImage
 
 class MusicPlayer: UIView {
 
@@ -10,6 +11,8 @@ class MusicPlayer: UIView {
     var playPauseButton: UIButton!
     var favoriteButton: UIButton!
 
+    private var player: Player!
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -19,9 +22,14 @@ class MusicPlayer: UIView {
         self.layer.shadowRadius = 4
         self.layer.shadowOpacity = 0.15
 
+        player = Player.getInstance()
         setupView()
 
-        albumImageView.sd_setImage(with: URL(string: "https://freemusicarchive.org/file/images/artists/the_tunnel_-_20150909203729678.jpg"), placeholderImage: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(newTrackStartedPlaying(_:)), name: .newTrackSelected, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(trackLoading(_:)), name: .trackLoading, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(trackReadyToPlay(_:)), name: .trackReadyToPlay, object: nil)
+
+//        albumImageView.sd_setImage(with: URL(string: "https://freemusicarchive.org/file/images/artists/the_tunnel_-_20150909203729678.jpg"), placeholderImage: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -58,7 +66,7 @@ class MusicPlayer: UIView {
             maker.right.equalTo(playPauseButton.snp.left).inset(-8)
             maker.centerY.equalToSuperview()
             maker.height.equalTo(32)
-            maker.width.equalTo(48)
+            maker.width.equalTo(0)
         }
 
         titleLabel.snp.makeConstraints { maker in
@@ -99,12 +107,14 @@ class MusicPlayer: UIView {
         nextTrackButton.setImage(UIImage(icon: .NEXT_TRACK_36), for: .normal)
         nextTrackButton.imageView?.tintColor = .black
         nextTrackButton.imageView?.contentMode = .scaleAspectFit
+        nextTrackButton.addTarget(self, action: #selector(nextTrackButtonAction), for: .touchUpInside)
         addSubview(nextTrackButton)
 
         playPauseButton = UIButton()
-        playPauseButton.setImage(UIImage(icon: .PLAY_36), for: .normal)
+        playPauseButton.setImage(UIImage(icon: .PAUSE_36), for: .normal)
         playPauseButton.imageView?.tintColor = .black
         playPauseButton.imageView?.contentMode = .scaleAspectFit
+        playPauseButton.addTarget(self, action: #selector(playPauseButtonAction), for: .touchUpInside)
         addSubview(playPauseButton)
 
         favoriteButton = UIButton()
@@ -112,5 +122,43 @@ class MusicPlayer: UIView {
         favoriteButton.imageView?.tintColor = .black
         favoriteButton.imageView?.contentMode = .scaleAspectFit
         addSubview(favoriteButton)
+    }
+    
+    @objc private func playPauseButtonAction() {
+        player.togglePlayPauseState()
+        let image = player.isTrackPaused() ? UIImage(icon: .PLAY_36) : UIImage(icon: .PAUSE_36)
+        playPauseButton.setImage(image, for: .normal)
+    }
+    
+    @objc private func nextTrackButtonAction() {
+        player.nextTrack()
+    }
+
+    @objc private func newTrackStartedPlaying(_ notification: Notification) {
+        refreshView()
+    }
+
+    @objc private func trackLoading(_ notification: Notification) {
+        // TODO: Start animation
+        print("start animation - mp")
+        refreshView()
+    }
+
+    @objc private func trackReadyToPlay(_ notification: Notification) {
+        // todo stop animation
+        print("stop animation - mp")
+        refreshView()
+    }
+
+    func refreshView() {
+        DispatchQueue.main.async {
+            if let track = self.player.getCurrentTrack() {
+                self.albumImageView.sd_setImage(with: URL(string: track.trackImageUrl!))
+                self.titleLabel.text = track.title
+            }
+
+            let image = self.player.isTrackPaused() ? UIImage(icon: .PLAY_36) : UIImage(icon: .PAUSE_36)
+            self.playPauseButton.setImage(image, for: .normal)
+        }
     }
 }
