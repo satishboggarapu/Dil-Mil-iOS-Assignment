@@ -12,7 +12,6 @@ class GenreCollectionViewCell: UICollectionViewCell {
 
         setupView()
         addConstraints()
-
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -56,9 +55,9 @@ class GenreCollectionViewCell: UICollectionViewCell {
         addSubview(genreLabel)
     }
 
-    internal func updateCell(_ viewModel: GenreCellViewModel) {
+    func updateCell(_ viewModel: GenreCellViewModel) {
         genreLabel.text = viewModel.titleText
-//        genreLabel.textColor = viewModel.genreBackgroundColor
         genreView.backgroundColor =  viewModel.genreBackgroundColor
+//        genreLabel.textColor = viewModel.genreBackgroundColor
     }
 }

@@ -5,10 +5,10 @@ import Lottie
 class BrowseViewController: UIViewController {
 
     // MARK: UIElements
-    internal var collectionView: UICollectionView!
-    internal var errorLabel: UILabel!
-    internal var failAnimationView: LOTAnimationView!
-    internal var loadingAnimationView: LOTAnimationView!
+    var collectionView: UICollectionView!
+    var errorLabel: UILabel!
+    var failAnimationView: LOTAnimationView!
+    var loadingAnimationView: LOTAnimationView!
 
     // MARK: Attributes
     private var viewModel: GenresViewModel!
@@ -36,8 +36,7 @@ class BrowseViewController: UIViewController {
     }
 
     private func initializeViewModel() {
-
-        ///
+        /// closure method to reloadCollectionView from view model
         viewModel.reloadCollectionViewClosure = { () in
             DispatchQueue.main.async {
                 self.loadingAnimationView.stopAnimation()
@@ -167,7 +166,6 @@ extension BrowseViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let genre = viewModel.getGenreForCell(indexPath)
-//        let genre = GenreModel(id: "sjdc", parentId: "sdj", title: "skjd", handle: "skjdn", color: "sjdn")
         navigationController?.pushViewController(TracksViewController(genre: genre), animated: true)
     }
 

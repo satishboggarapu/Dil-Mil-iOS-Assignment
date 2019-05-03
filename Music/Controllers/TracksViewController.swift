@@ -5,11 +5,11 @@ import Lottie
 class TracksViewController: UIViewController {
 
     // MARK: UIElements
-    internal var collectionView: UICollectionView!
-    internal var player: Player!
-    internal var errorLabel: UILabel!
-    internal var failAnimationView: LOTAnimationView!
-    internal var loadingAnimationView: LOTAnimationView!
+    var collectionView: UICollectionView!
+    var player: Player!
+    var errorLabel: UILabel!
+    var failAnimationView: LOTAnimationView!
+    var loadingAnimationView: LOTAnimationView!
 
     // MARK: Attributes
     private var genre: GenreModel!
@@ -51,7 +51,7 @@ class TracksViewController: UIViewController {
     }
 
     private func initializeViewModel() {
-        ///
+        /// closure method to reloadCollectionView from view model
         viewModel.reloadCollectionViewClosure = { () in
             DispatchQueue.main.async {
                 self.loadingAnimationView.stopAnimation()

@@ -1,6 +1,9 @@
 import Foundation
 import AVFoundation
 
+/**
+    Singleton class to control AudioPlayer throughout the app.
+ */
 class Player: NSObject {
 
     private static var playerInstance: Player!
@@ -17,12 +20,18 @@ class Player: NSObject {
         return playerInstance
     }
 
+    /// Setter method called when new track is selected in TrackViewController. Updates values and plays current track
+    /// Parameters:
+    ///     - mode: TrackResponseModel object, which treated as a playlist
+    ///     - trackIndex: index of the track selected in model.tracks array
     func didSelectNewSongToPlay(model: TracksResponseModel, trackIndex: Int) {
         self.playlist = model
         self.currentTrackIndex = trackIndex
         playCurrentTrack()
     }
 
+    /// Plays current track. Fires newTrackSelected and trackLoading notifications.
+    /// Checks local cache if song already downloaded first before making a url request
     private func playCurrentTrack() {
         NotificationCenter.default.post(name: .newTrackSelected, object: nil)
         NotificationCenter.default.post(name: .trackLoading, object: nil)
@@ -41,26 +50,31 @@ class Player: NSObject {
         }
     }
 
+    /// Skips current track to next by incrementing the currentTrackIndex and calls playCurrentTrack() method
     func nextTrack() {
         currentTrackIndex = (currentTrackIndex == (playlist?.tracks.count ?? 0) - 1) ? currentTrackIndex : currentTrackIndex! + 1
         playCurrentTrack()
     }
 
+    /// Go back to previous track by decrementing the currentTrackIndex and calls playCurrentTrack() method
     func previousTrack() {
         currentTrackIndex = (currentTrackIndex! == 0) ? 0 : currentTrackIndex! - 1
         playCurrentTrack()
     }
 
+    /// Pauses audioPlayer and fires .trackPaused notification
     func pauseTrack() {
         audioPlayer.pause()
         NotificationCenter.default.post(name: .trackPaused, object: nil)
     }
 
+    /// Resumes audioPlayer and fires .trackResume notificaiton
     func resumeTrack() {
         audioPlayer.play()
         NotificationCenter.default.post(name: .trackResumed, object: nil)
     }
 
+    /// Toggles audioPlayer playPause state
     func togglePlayPauseState() {
         if isTrackPaused() {
             resumeTrack()
@@ -77,6 +91,7 @@ class Player: NSObject {
         return playlist?.tracks[currentTrackIndex ?? 0]
     }
 
+    /// Returns true if audioPlayer is paused else false
     func isTrackPaused() -> Bool {
         return audioPlayer.rate == 0 && audioPlayer.error == nil
     }
@@ -85,12 +100,16 @@ class Player: NSObject {
         return audioPlayer.currentItem
     }
 
+    /// Seek audio player a provide CMTime
+    /// Parameters:
+    ///     - time: CMTime object to seek to
     func seekAudioPlayerTo(time: CMTime, completion: @escaping (() -> Void)) {
         audioPlayer.seek(to: time) { (b: Bool) -> Void in
             return completion()
         }
     }
 
+    /// Returns value from 0 to 1 for slider in MusicPlayerViewController
     func getSliderValue() -> Float {
         let currentTime = audioPlayer.currentTime()
         let seconds = CMTimeGetSeconds(currentTime)
@@ -105,6 +124,7 @@ class Player: NSObject {
         return 0
     }
 
+    /// Returns current track time from the audioPlayer for MusicPlayerViewController
     func getTrackCurrentTime() -> String {
         let currentTime = audioPlayer.currentTime()
         if currentTime.isValid {
@@ -119,7 +139,6 @@ class Player: NSObject {
 
 extension Player: CachingPlayerItemDelegate {
     func playerItem(_ playerItem: CachingPlayerItem, didFinishDownloadingData data: Data) {
-//        print("didFinishDownloadingData")
         if let url = (playerItem.asset as? AVURLAsset)?.url {
             var cleanUrl = url.absoluteString
             cleanUrl = cleanUrl.replacingOccurrences(of: "cachingPlayerItemScheme", with: "https")
@@ -129,7 +148,7 @@ extension Player: CachingPlayerItemDelegate {
     }
 
     func playerItemPlaybackStalled(_ playerItem: CachingPlayerItem) {
-//        print("playerItemPlaybackStalled")
+        // TODO
     }
 
     func playerItem(_ playerItem: CachingPlayerItem, downloadingFailedWith error: Error) {
@@ -137,10 +156,9 @@ extension Player: CachingPlayerItemDelegate {
     }
 
     func playerItemReadyToPlay(_ playerItem: CachingPlayerItem) {
-//        print("playerItemReadyToPlay")
         audioPlayer.replaceCurrentItem(with: playerItem)
         audioPlayer.play()
-        print(audioPlayer.reasonForWaitingToPlay?.rawValue)
+//        print(audioPlayer.reasonForWaitingToPlay?.rawValue)
         if audioPlayer.reasonForWaitingToPlay == AVPlayer.WaitingReason.noItemToPlay {
             playCurrentTrack()
             return
@@ -149,6 +167,7 @@ extension Player: CachingPlayerItemDelegate {
         NotificationCenter.default.post(name: .trackReadyToPlay, object: nil)
     }
 
+    /// Observer method triggered when audioPlayer finishes playing track
     @objc private func audioPlayerDidFinishPlaying() {
         nextTrack()
     }

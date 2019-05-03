@@ -1,5 +1,8 @@
 import Foundation
 
+/**
+    Helper class for returning url strings. Used in FMAManager
+ */
 class URLHelper {
 
     private let apiKey = "2RYX9MW0RSIPYNPI"

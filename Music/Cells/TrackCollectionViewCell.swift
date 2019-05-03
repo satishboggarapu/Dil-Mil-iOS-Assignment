@@ -123,7 +123,7 @@ class TrackCollectionViewCell: UICollectionViewCell {
         }
     }
 
-    internal func updateCell(_ viewModel: TrackCellViewModel) {
+    func updateCell(_ viewModel: TrackCellViewModel) {
         albumImageView.sd_setImage(with: URL(string: viewModel.trackImageUrl), placeholderImage: nil)
         trackTitleLabel.text = viewModel.titleText
         trackAlbumLabel.text = viewModel.albumTitleText
@@ -134,7 +134,7 @@ class TrackCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    internal func toggleAnimation(isCurrentTrack: Bool, isPlaying: Bool) {
+    func toggleAnimation(isCurrentTrack: Bool, isPlaying: Bool) {
         _ = isCurrentTrack ? animationView.startAnimation() : animationView.stopAnimation()
         _ = isPlaying ? animationView.startAnimation() : animationView.stop()
     }

@@ -26,14 +26,17 @@ class TracksViewModel {
         fmaManager = FMAManager()
         isLoading = false
     }
-    
-    internal func fetchTracks(completion: @escaping (() -> Void) = {}) {
+
+    /// Fetch tracks from FMA. Checks if tracks are currently being loaded first.
+    /// If so return. Else checks if more currentPage == totalPages. If currentPage
+    /// is less then totalPages, make async call to fetch more track.
+    func fetchTracks(completion: @escaping (() -> Void) = {}) {
         if isLoading {
             return completion()
         }
 
         isLoading = true
-        let currentPage = 1//(tracksResponseModel == nil) ? 0 : Int(tracksResponseModel.currentPage)!
+        let currentPage = (tracksResponseModel == nil) ? 0 : Int(tracksResponseModel.currentPage)!
         let nextPage = currentPage + 1
         fmaManager.getTracks(genre: genre, page: nextPage) { response, error in
             guard let response = response, error == nil else {
@@ -41,6 +44,7 @@ class TracksViewModel {
                 return completion()
             }
 
+            // Make async calls to fetch track_file_url for each track
             let dispatchGroup = DispatchGroup()
             var responses = response
             for i in stride(from: 0, to: response.tracks.count, by: 1) {
@@ -53,6 +57,7 @@ class TracksViewModel {
                 }
             }
 
+            // execute code after all async calls returned
             dispatchGroup.notify(queue: .main) {
                 if self.tracksResponseModel == nil {
                     self.tracksResponseModel = responses
@@ -64,7 +69,8 @@ class TracksViewModel {
             }
         }
     }
-    
+
+    /// Convert TrackModel to TrackCellViewModel and append to cellViewModels array
     private func appendTrackCellViewModels(_ tracks: [TrackModel]) {
         var trackCellViewModels = [TrackCellViewModel]()
         tracks.forEach { model in

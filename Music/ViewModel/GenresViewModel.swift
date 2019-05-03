@@ -24,7 +24,10 @@ class GenresViewModel {
         fmaManager = FMAManager()
         isLoading = false
     }
-    
+
+    /// Fetch genres from FMA. Checks if genres are currently being loaded first.
+    /// If so return. Else checks if more currentPage == totalPages. If currentPage
+    /// is less then totalPages, make async call to fetch more genres.
     internal func fetchGenres(completion: @escaping (() -> Void) = {}) {
         if isLoading {
             completion()
@@ -56,7 +59,8 @@ class GenresViewModel {
             self.isLoading = false
         }
     }
-    
+
+    /// Convert GenreModel to GenreCellViewModel and append to cellViewModels array
     private func appendGenreCellViewModels(_ genres: [GenreModel]) {
         var genreCellViewModels = [GenreCellViewModel]()
         genres.forEach { genre in

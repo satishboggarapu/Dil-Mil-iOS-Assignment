@@ -43,11 +43,14 @@ class MainTabBarController: UITabBarController {
     }
 
     private func setupTabBarViewControllers() {
-        let searchViewController = SearchViewController()
-        searchViewController.tabBarItem = UITabBarItem(title: "Search", image: UIImage(icon: .SEARCH), tag: 0)
-
         let browseViewController = BrowseViewController()
-        browseViewController.tabBarItem = UITabBarItem(title: "Browse", image: UIImage(icon: .LIBRARY), tag: 1)
+        browseViewController.tabBarItem = UITabBarItem(title: "Browse", image: UIImage(icon: .LIBRARY), tag: 0)
+
+        let searchViewController = SearchViewController()
+        searchViewController.tabBarItem = UITabBarItem(title: "Search", image: UIImage(icon: .SEARCH), tag: 1)
+
+//        let accountViewController = AccountViewController()
+//        accountViewController.tabBarItem = UITabBarItem(title: "Account", image: UIImage(icon: .), tag: <#T##Int##Swift.Int#>)
 
         let controllers = [browseViewController, searchViewController]
         viewControllers = controllers.map { UINavigationController(rootViewController: $0) }

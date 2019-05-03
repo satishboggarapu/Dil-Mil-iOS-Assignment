@@ -212,6 +212,7 @@ class MusicPlayerViewController: UIViewController {
     private var nextTrackButton: UIButton!
     private var loadingAnimationView: LOTAnimationView!
 
+    // MARK: Attributes
     private var player: Player!
     private var timer = Timer()
     private var isMovingSlider: Bool = false
@@ -346,14 +347,12 @@ class MusicPlayerViewController: UIViewController {
         view.addSubview(backButton)
 
         songNameLabel = UILabel()
-        songNameLabel.text = "Song Name Label"
         songNameLabel.textColor = .black
         songNameLabel.textAlignment = .center
         songNameLabel.font = Font.Futura.medium(with: 24)
         view.addSubview(songNameLabel)
 
         songInfoLabel = UILabel()
-        songInfoLabel.text = "Song Info Label"
         songInfoLabel.textColor = .black
         songInfoLabel.textAlignment = .center
         songInfoLabel.font = Font.Futura.regular(with: 18)
@@ -390,14 +389,12 @@ class MusicPlayerViewController: UIViewController {
         view.addSubview(nextTrackButton)
 
         trackCurrentTime = UILabel()
-        trackCurrentTime.text = "1:23"
         trackCurrentTime.textColor = .black
         trackCurrentTime.textAlignment = .left
         trackCurrentTime.font = Font.Futura.medium(with: 17)
         view.addSubview(trackCurrentTime)
 
         trackTotalTime = UILabel()
-        trackTotalTime.text = "4:52"
         trackTotalTime.textColor = .black
         trackTotalTime.textAlignment = .right
         trackTotalTime.font = Font.Futura.medium(with: 17)
@@ -412,6 +409,7 @@ class MusicPlayerViewController: UIViewController {
         view.insertSubview(loadingAnimationView, aboveSubview: albumImageView)
     }
 
+    /// Refresh UI for view by updating labels and imageView's
     private func refreshUI() {
         DispatchQueue.main.async {
             let image = self.player.isTrackPaused() ? UIImage(icon: .PLAY_36) : UIImage(icon: .PAUSE_36)
@@ -428,6 +426,7 @@ class MusicPlayerViewController: UIViewController {
         }
     }
 
+    /// Observer method called when slider stops moving. Seek the audioPlayer to appropriate time
     @objc private func sliderDidEndSliding() {
         if let playerItem = player.getAudioPlayerCurrentItem() {
             let totalSeconds = CMTimeGetSeconds(playerItem.asset.duration)
@@ -446,6 +445,7 @@ class MusicPlayerViewController: UIViewController {
         isMovingSlider = true
     }
 
+    /// Update slider value and current time for track. Called by timer which is triggered every second
     @objc func updateSliderValue(override: Bool) {
         if !isMovingSlider && !player.isTrackPaused() || override {
             slider.value = player.getSliderValue()
@@ -464,12 +464,10 @@ class MusicPlayerViewController: UIViewController {
 
     @objc private func previousTrackButtonAction() {
         player.previousTrack()
-//        refreshUI()
     }
 
     @objc private func nextTrackButtonAction() {
         player.nextTrack()
-//        refreshUI()
     }
     
     @objc private func trackReadyToPlay(_ notification: Notification) {

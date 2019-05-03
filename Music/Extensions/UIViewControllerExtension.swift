@@ -2,7 +2,6 @@ import UIKit
 
 extension UIViewController {
 
-    /***/
     @objc func setupNavigationBar() { }
 
     /**

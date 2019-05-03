@@ -19,10 +19,10 @@ class MusicPlayer: UIView {
         super.init(frame: frame)
 
         backgroundColor = .white
-        self.layer.shadowOffset = .zero
-        self.layer.shadowColor = UIColor.darkGray.cgColor
-        self.layer.shadowRadius = 4
-        self.layer.shadowOpacity = 0.15
+        layer.shadowOffset = .zero
+        layer.shadowColor = UIColor.darkGray.cgColor
+        layer.shadowRadius = 4
+        layer.shadowOpacity = 0.15
 
         player = Player.getInstance()
         setupView()
@@ -30,8 +30,6 @@ class MusicPlayer: UIView {
         NotificationCenter.default.addObserver(self, selector: #selector(newTrackStartedPlaying(_:)), name: .newTrackSelected, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(trackLoading(_:)), name: .trackLoading, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(trackReadyToPlay(_:)), name: .trackReadyToPlay, object: nil)
-
-//        albumImageView.sd_setImage(with: URL(string: "https://freemusicarchive.org/file/images/artists/the_tunnel_-_20150909203729678.jpg"), placeholderImage: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -161,6 +159,7 @@ class MusicPlayer: UIView {
         refreshView()
     }
 
+    /// Update label values with button image along with animations
     func refreshView() {
         DispatchQueue.main.async {
             if let track = self.player.getCurrentTrack() {
