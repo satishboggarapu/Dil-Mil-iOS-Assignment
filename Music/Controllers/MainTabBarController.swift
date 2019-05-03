@@ -4,22 +4,20 @@ import SnapKit
 class MainTabBarController: UITabBarController {
 
     var musicPlayer: MusicPlayer!
+    var player: Player!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        player = Player.getInstance()
         setupTabBar()
         setupTabBarViewControllers()
         setupView()
         addConstraints()
 
+        NotificationCenter.default.addObserver(self, selector: #selector(newTrackSelected(_:)), name: .newTrackSelected, object: nil)
+        toggleMusicPlayer()
     }
-
-/*    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        musicPlayerTapGesture()
-    }*/
 
     override func addConstraints() {
         musicPlayer.snp.makeConstraints { maker in
@@ -56,10 +54,17 @@ class MainTabBarController: UITabBarController {
     }
 
     @objc private func musicPlayerTapGesture() {
-        print("musicPlayer tap gesture")
         let musicPlayerViewController = MusicPlayerViewController()
         musicPlayerViewController.hidesBottomBarWhenPushed = true
         musicPlayerViewController.modalPresentationStyle = .overFullScreen
         present(musicPlayerViewController, animated: true)
+    }
+
+    @objc private func newTrackSelected(_ notification: Notification) {
+        toggleMusicPlayer()
+    }
+
+    private func toggleMusicPlayer() {
+        musicPlayer.isHidden = player.getCurrentTrackIndex() == nil
     }
 }

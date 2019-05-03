@@ -27,39 +27,10 @@ class TracksViewModel {
         isLoading = false
     }
     
-    internal func fetchTracks() {
+    internal func fetchTracks(completion: @escaping (() -> Void) = {}) {
         if isLoading {
-            return
+            return completion()
         }
-
-//        if let trackResponse = tracksResponseModel,
-//           trackResponse.totalPages == Int(trackResponse.currentPage) {
-//            return
-//        }
-
-//        self.isLoading = true
-//        let tracks = ["188044", "188043", "188042", "188041", "188040", "188039",
-//                      "187968", "187957", "187956", "187955"]
-//
-//
-//        let dispatchGroup = DispatchGroup()
-//        var trackModels = [TrackModel]()
-//        for track in tracks {
-//            dispatchGroup.enter()
-//            fmaManager.getTrack(trackId: track) { model, error in
-//                if let model = model {
-//                    trackModels.append(model)
-//                }
-//                dispatchGroup.leave()
-//            }
-//        }
-//
-//        dispatchGroup.notify(queue: .main) {
-//            self.isLoading = false
-//            self.tracksResponseModel = TracksResponseModel(totalPages: 1, currentPage: "1", tracks: trackModels)
-//            self.appendTrackCellViewModels(trackModels)
-//        }
-
 
         isLoading = true
         let currentPage = 1//(tracksResponseModel == nil) ? 0 : Int(tracksResponseModel.currentPage)!
@@ -67,16 +38,30 @@ class TracksViewModel {
         fmaManager.getTracks(genre: genre, page: nextPage) { response, error in
             guard let response = response, error == nil else {
                 self.isLoading = false
-                return
+                return completion()
             }
 
-            if self.tracksResponseModel == nil {
-                self.tracksResponseModel = response
-            } else {
-                self.tracksResponseModel.update(response)
+            let dispatchGroup = DispatchGroup()
+            var responses = response
+            for i in stride(from: 0, to: response.tracks.count, by: 1) {
+                dispatchGroup.enter()
+                self.fmaManager.getTrack(trackId: response.tracks[i].id) { fileUrl, error in
+                    if let fileUrl = fileUrl, error == nil {
+                        responses.tracks[i].setFileUrl(fileUrl)
+                    }
+                    dispatchGroup.leave()
+                }
             }
-            self.appendTrackCellViewModels(response.tracks)
-            self.isLoading = false
+
+            dispatchGroup.notify(queue: .main) {
+                if self.tracksResponseModel == nil {
+                    self.tracksResponseModel = responses
+                } else {
+                    self.tracksResponseModel.update(responses)
+                }
+                self.appendTrackCellViewModels(responses.tracks)
+                self.isLoading = false
+            }
         }
     }
     

@@ -24,18 +24,15 @@ class FMAManager {
 //                return completion(nil, error)
 //            }
 //
-////            self.defaults.set(data, forKey: "genres")
-//
 //            self.createGenreObjectWith(json: data) { model, error in
 //                guard let model = model, error == nil else {
 //                    return completion(nil, error)
 //                }
-//
-//                let encoder = JSONEncoder()
-//                if let encoded = try? encoder.encode(model) {
-//                    let defaults = UserDefaults.standard
-//                    defaults.set(encoded, forKey: "genres")
-//                }
+////                let encoder = JSONEncoder()
+////                if let encoded = try? encoder.encode(model) {
+////                    let defaults = UserDefaults.standard
+////                    defaults.set(encoded, forKey: "genres")
+////                }
 //
 //                return completion(model, nil)
 //            }
@@ -57,18 +54,16 @@ class FMAManager {
 //                return completion(nil, error)
 //            }
 //
-////            self.defaults.set(data, forKey: "\(genre.id)")
-//
 //            self.createTrackObjectWith(json: data) { response, error in
 //                guard let response = response, error == nil else {
 //                    return completion(nil, error)
 //                }
 //
-//                let encoder = JSONEncoder()
-//                if let encoded = try? encoder.encode(response) {
-//                    let defaults = UserDefaults.standard
-//                    defaults.set(encoded, forKey: "\(genre.id)")
-//                }
+////                let encoder = JSONEncoder()
+////                if let encoded = try? encoder.encode(response) {
+////                    let defaults = UserDefaults.standard
+////                    defaults.set(encoded, forKey: "\(genre.id)")
+////                }
 //
 //                return completion(response, nil)
 //            }

@@ -28,23 +28,14 @@ class Player: NSObject {
         NotificationCenter.default.post(name: .trackLoading, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: audioPlayer.currentItem)
         DispatchQueue.global(qos: .background).async {
-            if let track = self.getCurrentTrack() {
-                self.fmaManager.getTrack(trackId: track.id) { s, error in
-                    if let url = s, error == nil {
-                        print(url)
-                        if let data = self.songCache.object(forKey: url as NSString) {
-                            let playerItem = CachingPlayerItem(data: data as Data, mimeType: "audio/mpeg", fileExtension: "mp3")
-                            playerItem.delegate = self
-
-//                            self.audioPlayer = AVPlayer(playerItem: playerItem)
-//                            self.audioPlayer.automaticallyWaitsToMinimizeStalling = false
-                        } else if let url = URL(string: url) {
-                            let playerItem = CachingPlayerItem(url: url, customFileExtension: "mp3")
-                            playerItem.delegate = self
-                        }
-                    } else {
-                        print(error)
-                    }
+            if let track = self.getCurrentTrack(), let fileUrl = track.fileUrl {
+                print(fileUrl)
+                if let data = self.songCache.object(forKey: fileUrl as NSString) {
+                    let playerItem = CachingPlayerItem(data: data as Data, mimeType: "audio/mpeg", fileExtension: "mp3")
+                    playerItem.delegate = self
+                } else if let url = URL(string: fileUrl) {
+                    let playerItem = CachingPlayerItem(url: url, customFileExtension: "mp3")
+                    playerItem.delegate = self
                 }
             }
         }

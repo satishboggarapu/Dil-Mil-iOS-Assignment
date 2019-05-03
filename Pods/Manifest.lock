@@ -1,4 +1,5 @@
 PODS:
+  - lottie-ios (2.5.0)
   - MaterialComponents (63.0.0):
     - MaterialComponents/ActivityIndicator (= 63.0.0)
     - "MaterialComponents/ActivityIndicator+ColorThemer (= 63.0.0)"
@@ -472,6 +473,7 @@ PODS:
   - SnapKit (4.0.1)
 
 DEPENDENCIES:
+  - lottie-ios
   - MaterialComponents
   - NVActivityIndicatorView
   - SDWebImage
@@ -479,6 +481,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - lottie-ios
     - MaterialComponents
     - MDFInternationalization
     - MDFTextAccessibility
@@ -490,6 +493,7 @@ SPEC REPOS:
     - SnapKit
 
 SPEC CHECKSUMS:
+  lottie-ios: d699fdee68d7b63e721d949388b015fef1aaa4ac
   MaterialComponents: 4e0c0ee000e0dcbf5214b0054767ef9f8f812264
   MDFInternationalization: b5b8626628abf026e630e5ebaeee563037712cbb
   MDFTextAccessibility: 94098925e0853551c5a311ce7c1ecefbe297cdb6
@@ -500,6 +504,6 @@ SPEC CHECKSUMS:
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
 
-PODFILE CHECKSUM: 18245c897debbe486065973907b53351025d54e3
+PODFILE CHECKSUM: 46f1e6bec710b2fe3571de353e5599807cd69c36
 
 COCOAPODS: 1.5.3

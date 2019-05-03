@@ -1,7 +1,7 @@
 import UIKit
 import SnapKit
 import SDWebImage
-import NVActivityIndicatorView
+import Lottie
 
 class TrackCollectionViewCell: UICollectionViewCell {
 
@@ -12,16 +12,13 @@ class TrackCollectionViewCell: UICollectionViewCell {
     var trackAlbumLabel: UILabel!
     var listensImageView: UIImageView!
     var listensLabel: UILabel!
-    var animationView: NVActivityIndicatorView!
-    var equalizerImageView: UIImageView!
+    var animationView: LOTAnimationView!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         setupView()
         addConstraints()
-
-//        albumImageView.sd_setImage(with: URL(string: "https://freemusicarchive.org/file/images/artists/the_tunnel_-_20150909203729678.jpg"), placeholderImage: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -51,21 +48,18 @@ class TrackCollectionViewCell: UICollectionViewCell {
         albumView.addSubview(albumImageView)
 
         trackTitleLabel = UILabel()
-        trackTitleLabel.text = "Track Title"
         trackTitleLabel.textColor = .black
         trackTitleLabel.font = Font.Futura.medium(with: 18)
         trackTitleLabel.textAlignment = .left
         addSubview(trackTitleLabel)
 
         trackAlbumLabel = UILabel()
-        trackAlbumLabel.text = "Album Label"
         trackAlbumLabel.textColor = .black
         trackAlbumLabel.font = Font.Futura.regular(with: 16)
         trackAlbumLabel.textAlignment = .left
         addSubview(trackAlbumLabel)
 
         listensLabel = UILabel()
-        listensLabel.text = "12.4K"
         listensLabel.textColor = .darkGray
         listensLabel.font = Font.Futura.regular(with: 13)
         listensLabel.textAlignment = .left
@@ -76,33 +70,22 @@ class TrackCollectionViewCell: UICollectionViewCell {
         listensImageView.tintColor = .darkGray
         addSubview(listensImageView)
 
-        animationView = NVActivityIndicatorView(frame: .zero)
-        animationView.type = .audioEqualizer
-        animationView.color = .darkGray
+        animationView = LOTAnimationView(name: LottieAnimation.equalizer)
+        animationView.contentMode = .scaleAspectFill
+        animationView.loopAnimation = true
+        animationView.isHidden = true
         addSubview(animationView)
-
-        equalizerImageView = UIImageView()
-        equalizerImageView.image = UIImage(icon: .EQUALIZER_24)
-        equalizerImageView.tintColor = .darkGray
-        equalizerImageView.isHidden = true
-        addSubview(equalizerImageView)
     }
 
     override func addConstraints() {
         animationView.snp.makeConstraints { maker in
-            maker.left.equalToSuperview().offset(0)
+            maker.left.equalToSuperview().offset(-50)
             maker.centerY.equalToSuperview()
-            maker.size.equalTo(24)
-        }
-
-        equalizerImageView.snp.makeConstraints { maker in
-            maker.left.equalToSuperview().offset(0)
-            maker.centerY.equalToSuperview()
-            maker.size.equalTo(24)
+            maker.size.equalTo(128)
         }
 
         albumView.snp.makeConstraints { maker in
-            maker.left.equalTo(animationView.snp.right).offset(12)
+            maker.left.equalToSuperview().offset(36)
             maker.top.equalToSuperview().offset(6)
             maker.bottom.equalToSuperview().inset(6)
             maker.width.equalTo(self.bounds.height - 12)
@@ -152,14 +135,7 @@ class TrackCollectionViewCell: UICollectionViewCell {
     }
     
     internal func toggleAnimation(isCurrentTrack: Bool, isPlaying: Bool) {
-        _ = isCurrentTrack ? animationView.startAnimating() : animationView.stopAnimating()
-
-//        if isCurrentTrack {
-//            _ = isPlaying ? animationView.startAnimating() : animationView.stopAnimating()
-//            equalizerImageView.isHidden = isPlaying
-//        } else {
-//            animationView.stopAnimating()
-//            equalizerImageView.isHidden = true
-//        }
+        _ = isCurrentTrack ? animationView.startAnimation() : animationView.stopAnimation()
+        _ = isPlaying ? animationView.startAnimation() : animationView.stop()
     }
 }

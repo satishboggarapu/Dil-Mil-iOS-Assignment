@@ -10,6 +10,7 @@ target 'Music' do
   pod 'MaterialComponents'
   pod 'SDWebImage'
   pod 'NVActivityIndicatorView'
+  pod 'lottie-ios'
 
   target 'MusicTests' do
     inherit! :search_paths

@@ -3,6 +3,7 @@ import SnapKit
 import MaterialComponents
 import SDWebImage
 import AVFoundation
+import Lottie
 
 /*class MusicPlayerViewController: UIViewController {
 
@@ -209,6 +210,7 @@ class MusicPlayerViewController: UIViewController {
     private var playPauseButton: UIButton!
     private var previousTrackButton: UIButton!
     private var nextTrackButton: UIButton!
+    private var loadingAnimationView: LOTAnimationView!
 
     private var player: Player!
     private var timer = Timer()
@@ -226,6 +228,10 @@ class MusicPlayerViewController: UIViewController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(trackReadyToPlay(_:)), name: .trackReadyToPlay, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(trackLoading(_:)), name: .trackLoading, object: nil)
+
+        if player.getAudioPlayerCurrentItem() == nil {
+            loadingAnimationView.startAnimation()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -311,6 +317,10 @@ class MusicPlayerViewController: UIViewController {
             maker.width.equalTo(55)
             maker.height.equalTo(20)
         }
+
+        loadingAnimationView.snp.makeConstraints { maker in
+            maker.edges.equalTo(albumImageView)
+        }
     }
 
     override func setupView() {
@@ -393,6 +403,13 @@ class MusicPlayerViewController: UIViewController {
         trackTotalTime.font = Font.Futura.medium(with: 17)
         view.addSubview(trackTotalTime)
 
+        loadingAnimationView = LOTAnimationView(name: LottieAnimation.infinite_loading)
+        loadingAnimationView.backgroundColor = UIColor(white: 1, alpha: 0.85)
+        loadingAnimationView.contentMode = .scaleAspectFit
+        loadingAnimationView.loopAnimation = true
+        loadingAnimationView.layer.cornerRadius = 16
+        loadingAnimationView.isHidden = true
+        view.insertSubview(loadingAnimationView, aboveSubview: albumImageView)
     }
 
     private func refreshUI() {
@@ -456,14 +473,12 @@ class MusicPlayerViewController: UIViewController {
     }
     
     @objc private func trackReadyToPlay(_ notification: Notification) {
-        // TODO: End animation
-        print("stop animation - mvc")
+        loadingAnimationView.stopAnimation()
         refreshUI()
     }
 
     @objc private func trackLoading(_ notification: Notification) {
-        // TODO Animation start
-        print("Start animation - mvc")
+        loadingAnimationView.startAnimation()
         refreshUI()
     }
 }

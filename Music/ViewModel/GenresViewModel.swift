@@ -25,13 +25,15 @@ class GenresViewModel {
         isLoading = false
     }
     
-    internal func fetchGenres() {
+    internal func fetchGenres(completion: @escaping (() -> Void) = {}) {
         if isLoading {
+            completion()
             return
         }
 
         if let genreResponse = genreResponse,
            genreResponse.totalPages == Double(genreResponse.currentPage) {
+            completion()
             return
         }
 
@@ -41,6 +43,7 @@ class GenresViewModel {
         fmaManager.getGenres(page: nextPage) { response, error in
             guard let response = response, error == nil else {
                 self.isLoading = false
+                completion()
                 return
             }
 

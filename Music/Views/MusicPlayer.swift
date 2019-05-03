@@ -1,6 +1,7 @@
 import UIKit
 import SnapKit
 import SDWebImage
+import Lottie
 
 class MusicPlayer: UIView {
 
@@ -10,6 +11,7 @@ class MusicPlayer: UIView {
     var nextTrackButton: UIButton!
     var playPauseButton: UIButton!
     var favoriteButton: UIButton!
+    internal var loadingAnimationView: LOTAnimationView!
 
     private var player: Player!
 
@@ -76,6 +78,10 @@ class MusicPlayer: UIView {
             maker.bottom.equalTo(albumView)
         }
 
+        loadingAnimationView.snp.makeConstraints { maker in
+            maker.edges.equalTo(playPauseButton)
+        }
+
         self.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
         albumView.layer.shadowPath = UIBezierPath(rect: albumView.bounds).cgPath
     }
@@ -122,6 +128,13 @@ class MusicPlayer: UIView {
         favoriteButton.imageView?.tintColor = .black
         favoriteButton.imageView?.contentMode = .scaleAspectFit
         addSubview(favoriteButton)
+
+        loadingAnimationView = LOTAnimationView(name: LottieAnimation.infinite_loading)
+        loadingAnimationView.backgroundColor = .clear
+        loadingAnimationView.contentMode = .scaleAspectFit
+        loadingAnimationView.loopAnimation = true
+        loadingAnimationView.isHidden = true
+        insertSubview(loadingAnimationView, aboveSubview: playPauseButton)
     }
     
     @objc private func playPauseButtonAction() {
@@ -139,14 +152,12 @@ class MusicPlayer: UIView {
     }
 
     @objc private func trackLoading(_ notification: Notification) {
-        // TODO: Start animation
-        print("start animation - mp")
+        loadingAnimationView.startAnimation()
         refreshView()
     }
 
     @objc private func trackReadyToPlay(_ notification: Notification) {
-        // todo stop animation
-        print("stop animation - mp")
+        loadingAnimationView.stopAnimation()
         refreshView()
     }
 

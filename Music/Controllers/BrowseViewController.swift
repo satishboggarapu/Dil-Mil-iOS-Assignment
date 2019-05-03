@@ -1,10 +1,14 @@
 import UIKit
 import SnapKit
+import Lottie
 
 class BrowseViewController: UIViewController {
 
     // MARK: UIElements
     internal var collectionView: UICollectionView!
+    internal var errorLabel: UILabel!
+    internal var failAnimationView: LOTAnimationView!
+    internal var loadingAnimationView: LOTAnimationView!
 
     // MARK: Attributes
     private var viewModel: GenresViewModel!
@@ -18,8 +22,17 @@ class BrowseViewController: UIViewController {
         setupNavigationBar()
         setupView()
         addConstraints()
-
+        loadingAnimationView.startAnimation()
         initializeViewModel()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        collectionView.snp.updateConstraints { maker in
+            let value = Player.getInstance().getCurrentTrackIndex() == nil ? 0 : 54
+            maker.bottom.equalTo(view.layoutMarginsGuide.snp.bottom).inset(value)
+        }
     }
 
     private func initializeViewModel() {
@@ -27,11 +40,25 @@ class BrowseViewController: UIViewController {
         ///
         viewModel.reloadCollectionViewClosure = { () in
             DispatchQueue.main.async {
+                self.loadingAnimationView.stopAnimation()
+                if self.viewModel.numberOfCells == 0 {
+                    self.errorLabel.isHidden = false
+                    self.failAnimationView.startAnimation()
+                } else {
+                    self.errorLabel.isHidden = true
+                    self.failAnimationView.stopAnimation()
+                }
                 self.collectionView.reloadData()
             }
         }
 
-        viewModel.fetchGenres()
+        viewModel.fetchGenres {
+            DispatchQueue.main.async {
+                self.loadingAnimationView.stopAnimation()
+                self.errorLabel.isHidden = false
+                self.failAnimationView.startAnimation()
+            }
+        }
     }
 
     override func setupNavigationBar() {
@@ -67,12 +94,55 @@ class BrowseViewController: UIViewController {
         collectionView.register(GenreCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.contentInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         view.addSubview(collectionView)
+
+        errorLabel = UILabel()
+        errorLabel.text = "Failed to load genres."
+        errorLabel.textColor = .darkGray
+        errorLabel.font = Font.Futura.medium(with: 20)
+        errorLabel.textAlignment = .center
+        errorLabel.numberOfLines = 0
+        errorLabel.lineBreakMode = .byWordWrapping
+        errorLabel.isHidden = true
+        view.addSubview(errorLabel)
+
+        loadingAnimationView = LOTAnimationView(name: LottieAnimation.loading_infinity)
+        loadingAnimationView.backgroundColor = .clear
+        loadingAnimationView.contentMode = .scaleAspectFit
+        loadingAnimationView.loopAnimation = true
+        view.addSubview(loadingAnimationView)
+
+        failAnimationView = LOTAnimationView(name: LottieAnimation.failed_music)
+        failAnimationView.backgroundColor = .clear
+        failAnimationView.contentMode = .scaleAspectFit
+        failAnimationView.loopAnimation = false
+        failAnimationView.isHidden = true
+        failAnimationView.tintColor = .darkGray
+        view.addSubview(failAnimationView)
     }
 
     override func addConstraints() {
         collectionView.snp.makeConstraints { maker in
             maker.top.left.right.equalToSuperview()
             maker.bottom.equalTo(view.layoutMarginsGuide.snp.bottom).inset(54)
+        }
+
+        errorLabel.snp.makeConstraints { maker in
+            maker.left.equalToSuperview().offset(24)
+            maker.right.equalToSuperview().inset(24)
+            maker.height.equalTo(errorLabel.intrinsicContentSize.height)
+            maker.centerY.equalToSuperview().offset(-54)
+        }
+
+        failAnimationView.snp.makeConstraints { maker in
+            maker.size.equalTo(view.frame.width * 0.4)
+            maker.centerX.equalToSuperview()
+            maker.bottom.equalTo(errorLabel.snp.top)
+        }
+
+        loadingAnimationView.snp.makeConstraints { maker in
+            maker.centerX.equalToSuperview()
+            maker.centerY.equalToSuperview().offset(-64)
+            maker.size.equalTo(view.frame.width * 0.8)
         }
     }
 }

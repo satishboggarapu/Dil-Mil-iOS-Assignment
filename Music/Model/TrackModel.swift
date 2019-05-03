@@ -1,6 +1,5 @@
 import Foundation
 
-// TODO: Track explicit
 struct TrackModel: Codable {
     let id: String
     let title: String
@@ -10,7 +9,7 @@ struct TrackModel: Codable {
     let trackDuration: String?
     let trackNumber: String?
     let listens: String?
-//    let fileUrl: String
+    var fileUrl: String?
 
     enum CodingKeys: String, CodingKey {
         case id = "track_id"
@@ -21,6 +20,10 @@ struct TrackModel: Codable {
         case trackDuration = "track_duration"
         case trackNumber = "track_number"
         case listens = "track_listens"
-//        case fileUrl = "track_file_url"
+        case fileUrl = "track_file_url"
+    }
+
+    mutating func setFileUrl(_ url: String) {
+        self.fileUrl = url
     }
 }
