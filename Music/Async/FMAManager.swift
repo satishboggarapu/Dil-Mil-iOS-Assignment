@@ -21,31 +21,19 @@ class FMAManager {
     internal func getGenres(page: Int, completion: @escaping (_ data: GenresResponseModel?, _ error: Error?) -> Void) {
         let url = urlHelper.getGenresURLString(page)
 
-        if let genres = defaults.object(forKey: "genres") as? Data {
-            let decoder = JSONDecoder()
-            if let genreResponseModel = try? decoder.decode(GenresResponseModel.self, from: genres) {
-                completion(genreResponseModel, nil)
+        getJSONFromURL(urlString: url) { data, error in
+            guard let data = data, error == nil else {
+                return completion(nil, error)
+            }
+
+            self.createGenreObjectWith(json: data) { model, error in
+                guard let model = model, error == nil else {
+                    return completion(nil, error)
+                }
+
+                return completion(model, nil)
             }
         }
-
-//        getJSONFromURL(urlString: url) { data, error in
-//            guard let data = data, error == nil else {
-//                return completion(nil, error)
-//            }
-//
-//            self.createGenreObjectWith(json: data) { model, error in
-//                guard let model = model, error == nil else {
-//                    return completion(nil, error)
-//                }
-////                let encoder = JSONEncoder()
-////                if let encoded = try? encoder.encode(model) {
-////                    let defaults = UserDefaults.standard
-////                    defaults.set(encoded, forKey: "genres")
-////                }
-//
-//                return completion(model, nil)
-//            }
-//        }
     }
 
     /// Fetch tracks for a single genre from FreeMusicArchive API
@@ -56,32 +44,19 @@ class FMAManager {
     internal func getTracks(genre: GenreModel, page: Int, completion: @escaping (_ data: TracksResponseModel?, _ error: Error?) -> Void) {
         let url = urlHelper.getTracksURLString(genreId: genre.id, page: page)
 
-        if let tracks = defaults.object(forKey: "\(genre.id)") as? Data {
-            let decoder = JSONDecoder()
-            if let trackResponseModel = try? decoder.decode(TracksResponseModel.self, from: tracks) {
-                completion(trackResponseModel, nil)
+        getJSONFromURL(urlString: url) { data, error in
+            guard let data = data, error == nil else {
+                return completion(nil, error)
+            }
+
+            self.createTrackObjectWith(json: data) { response, error in
+                guard let response = response, error == nil else {
+                    return completion(nil, error)
+                }
+
+                return completion(response, nil)
             }
         }
-
-//        getJSONFromURL(urlString: url) { data, error in
-//            guard let data = data, error == nil else {
-//                return completion(nil, error)
-//            }
-//
-//            self.createTrackObjectWith(json: data) { response, error in
-//                guard let response = response, error == nil else {
-//                    return completion(nil, error)
-//                }
-//
-////                let encoder = JSONEncoder()
-////                if let encoded = try? encoder.encode(response) {
-////                    let defaults = UserDefaults.standard
-////                    defaults.set(encoded, forKey: "\(genre.id)")
-////                }
-//
-//                return completion(response, nil)
-//            }
-//        }
     }
 
     /// Fetch track_file_url for a single track from FreeMusicArchive API
@@ -155,13 +130,4 @@ extension FMAManager {
             return completion(nil, error)
         }
     }
-    
-//    private func createTrackWith(json: Data, completion: @escaping (_ data: TrackModel?, _ error: Error?) -> Void) {
-//        do {
-//            let trackModel = try JSONDecoder().decode(TrackModel.self, from: json)
-//            return completion(trackModel, nil)
-//        } catch let error {
-//            return completion(nil, error)
-//        }
-//    }
 }
